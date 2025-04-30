@@ -284,6 +284,28 @@
         updateCountdown();
         const timerInterval = setInterval(updateCountdown, 1000);
     });
+
+       const timerElement = document.querySelector(".timer");
+
+    async function fetchTime() {
+        try {
+            const response = await fetch("http://<IP_СЕРВЕРА>:8000/remaining-time");
+            const data = await response.json();
+
+            if (data.status === "ok") {
+                timerElement.textContent = data.remaining;
+            } else {
+                timerElement.textContent = "00:00:00";
+            }
+        } catch (error) {
+            console.error("Ошибка при получении времени:", error);
+            timerElement.textContent = "Ошибка";
+        }
+    }
+
+    // Обновлять каждую секунду
+    setInterval(fetchTime, 1000);
+    fetchTime();
 </script>
 </body>
 </html>
