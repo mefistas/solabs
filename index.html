@@ -219,71 +219,83 @@
     </audio>
 
 <script>
-    let endDate;
+    // Конфигурация таймера
+    const CONFIG = {
+        startDate: new Date('2025-05-05T00:00:00'), // Дата старта отсчета
+        durationDays: 11,                          // Длительность (дни)
+        durationHours: 11                           // Длительность (часы)
+    };
 
-    async function fetchServerTime() {
-        try {
-          const response = await fetch('/api/get-time');
-            const data = await response.json();
-            endDate = new Date(data.endTime);
-            
-            if (endDate < new Date()) {
-                endDate = new Date();
-                endDate.setDate(endDate.getDate() + 11);
-                endDate.setHours(endDate.getHours() + 11);
-            }
-        } catch (error) {
-            console.error("Ошибка запроса:", error);
-            // Фолбэк: локальный таймер
-            endDate = new Date();
-            endDate.setDate(endDate.getDate() + 11);
-            endDate.setHours(endDate.getHours() + 11);
-        }
+    // Вычисляем дату окончания
+    function calculateEndDate() {
+        const endDate = new Date(CONFIG.startDate);
+        endDate.setDate(endDate.getDate() + CONFIG.durationDays);
+        endDate.setHours(endDate.getHours() + CONFIG.durationHours);
+        return endDate;
     }
 
-    // Остальной код таймера без изменений
-    fetchServerTime().then(() => {
-        const countdownElement = document.getElementById('countdown');
-        const progressFill = document.querySelector('.progress-ring-fill');
-        const radius = 140;
-        const circumference = 2 * Math.PI * radius;
-        const audio = document.getElementById('bgMusic');
+    // Проверяем сохраненное время
+    let endDate;
+    const savedEndDate = localStorage.getItem('timerEndDate');
 
-        progressFill.style.strokeDasharray = circumference;
-        progressFill.style.strokeDashoffset = circumference;
+    if (savedEndDate) {
+        endDate = new Date(savedEndDate);
+        // Если сохраненная дата уже прошла - создаем новую
+        if (endDate < new Date()) {
+            endDate = calculateEndDate();
+            localStorage.setItem('timerEndDate', endDate.toISOString());
+        }
+    } else {
+        endDate = calculateEndDate();
+        localStorage.setItem('timerEndDate', endDate.toISOString());
+    }
 
-        document.body.addEventListener('click', () => {
-            audio.play().catch(e => console.log("Autoplay blocked:", e));
-        }, { once: true });
+    // Инициализация элементов
+    const countdownElement = document.getElementById('countdown');
+    const progressFill = document.querySelector('.progress-ring-fill');
+    const radius = 140;
+    const circumference = 2 * Math.PI * radius;
+    const audio = document.getElementById('bgMusic');
 
-        function updateCountdown() {
-            const now = new Date();
-            const diff = endDate - now;
+    progressFill.style.strokeDasharray = circumference;
+    progressFill.style.strokeDashoffset = circumference;
 
-            if (diff <= 0) {
-                clearInterval(timerInterval);
-                countdownElement.textContent = 'Airdrop Started!';
-                progressFill.style.strokeDashoffset = 0;
-                return;
-            }
+    // Автовоспроизведение аудио при клике
+    document.body.addEventListener('click', () => {
+        audio.play().catch(e => console.log("Autoplay blocked:", e));
+    }, { once: true });
 
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+    function updateCountdown() {
+        const now = new Date();
+        const diff = endDate - now;
 
-            const pad = (num) => num.toString().padStart(2, '0');
-            countdownElement.textContent = `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
-
-            const totalHours = 11 * 24 + 11;
-            const elapsedHours = totalHours - (days * 24 + hours);
-            const progress = elapsedHours / totalHours;
-            progressFill.style.strokeDashoffset = circumference - progress * circumference;
+        if (diff <= 0) {
+            clearInterval(timerInterval);
+            countdownElement.textContent = 'Airdrop Started!';
+            progressFill.style.strokeDashoffset = 0;
+            return;
         }
 
-        updateCountdown();
-        const timerInterval = setInterval(updateCountdown, 1000);
-    });
+        // Расчет временных единиц
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        // Форматирование вывода
+        const pad = (num) => num.toString().padStart(2, '0');
+        countdownElement.textContent = `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+
+        // Расчет прогресса
+        const totalDuration = (CONFIG.durationDays * 24 + CONFIG.durationHours) * 60 * 60 * 1000;
+        const elapsed = totalDuration - diff;
+        const progress = elapsed / totalDuration;
+        progressFill.style.strokeDashoffset = circumference - (progress * circumference);
+    }
+
+    // Запуск таймера
+    updateCountdown();
+    const timerInterval = setInterval(updateCountdown, 1000);
 </script>
-</body>
+    </body>
 </html>
