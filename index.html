@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Airdrop Countdown</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Orbitron', sans-serif;
+            background-color: #0a0a1a;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #ff00ff;
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff;
+        }
+
+        .timer-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 0 auto 30px;
+        }
+
+        .timer-circle {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: #1a0a2a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 30px rgba(138, 43, 226, 0.5);
+        }
+
+        .progress-ring {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            transform: rotate(-90deg);
+        }
+
+        .progress-ring-bg {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            fill: transparent;
+            stroke: #2a1a4a;
+            stroke-width: 6;
+        }
+
+        .progress-ring-fill {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            fill: transparent;
+            stroke: url(#gradient);
+            stroke-width: 6;
+            stroke-linecap: round;
+            stroke-dasharray: 879.2;
+            stroke-dashoffset: 879.2;
+            transition: stroke-dashoffset 1s linear;
+            filter: drop-shadow(0 0 5px #ff00ff);
+        }
+
+        .timer {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #fff;
+            z-index: 2;
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #ff00ff,
+                0 0 20px #ff00ff,
+                0 0 30px #9d00ff;
+            animation: pulse 1.5s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from {
+                text-shadow: 
+                    0 0 5px #fff,
+                    0 0 10px #ff00ff,
+                    0 0 20px #ff00ff;
+            }
+            to {
+                text-shadow: 
+                    0 0 10px #fff,
+                    0 0 20px #ff00ff,
+                    0 0 30px #ff00ff,
+                    0 0 40px #9d00ff;
+            }
+        }
+
+        .info-text {
+            color: #c792ea;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px 0;
+            color: #c792ea;
+        }
+
+        .checkbox-container input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: #9d00ff;
+        }
+
+        .btn {
+            background: linear-gradient(90deg, #9d00ff, #ff00ff);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: all 0.3s;
+            font-family: 'Orbitron', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 0 15px rgba(157, 0, 255, 0.7);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(255, 0, 255, 0.9);
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #9d00ff, #ff00ff, transparent);
+            margin: 25px 0;
+            box-shadow: 0 0 10px #ff00ff;
+        }
+
+        .github-connect {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #c792ea;
+        }
+
+        .github-connect input {
+            margin-right: 10px;
+            width: 18px;
+            height: 18px;
+            accent-color: #9d00ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>¿You+Sol+Abs?</h1>
+        <p class="info-text">something big happening here</p>
+        
+        <div class="timer-container">
+            <svg width="0" height="0">
+                <defs>
+                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stop-color="#9d00ff" />
+                        <stop offset="100%" stop-color="#ff00ff" />
+                    </linearGradient>
+                </defs>
+            </svg>
+            <div class="timer-circle">
+                <svg class="progress-ring" viewBox="0 0 300 300">
+                    <circle class="progress-ring-bg" r="140" cx="150" cy="150"></circle>
+                    <circle class="progress-ring-fill" r="140" cx="150" cy="150"></circle>
+                </svg>
+                <div class="timer" id="countdown">11d 11h 11m 11s</div>
+            </div>
+        </div>
+
+        <p class="info-text"><strong>you abs sol?</strong></p>
+        
+        <div class="checkbox-container">
+            <input type="checkbox" id="confirm">
+            <label for="confirm">abs you sol?</label>
+        </div>
+        
+        <button class="btn">usless button yet</button>
+        
+        <div class="divider"></div>
+        
+        
+        <div class="github-connect">
+            <input type="checkbox" id="github" checked>
+            <label for="github">you can untick here but you can't escape</label>
+        </div>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+<script>
+    let endDate;
+
+    async function fetchServerTime() {
+        try {
+          const response = await fetch('/api/get-time');
+            const data = await response.json();
+            endDate = new Date(data.endTime);
+            
+            if (endDate < new Date()) {
+                endDate = new Date();
+                endDate.setDate(endDate.getDate() + 11);
+                endDate.setHours(endDate.getHours() + 11);
+            }
+        } catch (error) {
+            console.error("Ошибка запроса:", error);
+            // Фолбэк: локальный таймер
+            endDate = new Date();
+            endDate.setDate(endDate.getDate() + 11);
+            endDate.setHours(endDate.getHours() + 11);
+        }
+    }
+
+    // Остальной код таймера без изменений
+    fetchServerTime().then(() => {
+        const countdownElement = document.getElementById('countdown');
+        const progressFill = document.querySelector('.progress-ring-fill');
+        const radius = 140;
+        const circumference = 2 * Math.PI * radius;
+        const audio = document.getElementById('bgMusic');
+
+        progressFill.style.strokeDasharray = circumference;
+        progressFill.style.strokeDashoffset = circumference;
+
+        document.body.addEventListener('click', () => {
+            audio.play().catch(e => console.log("Autoplay blocked:", e));
+        }, { once: true });
+
+        function updateCountdown() {
+            const now = new Date();
+            const diff = endDate - now;
+
+            if (diff <= 0) {
+                clearInterval(timerInterval);
+                countdownElement.textContent = 'Airdrop Started!';
+                progressFill.style.strokeDashoffset = 0;
+                return;
+            }
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            const pad = (num) => num.toString().padStart(2, '0');
+            countdownElement.textContent = `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
+
+            const totalHours = 11 * 24 + 11;
+            const elapsedHours = totalHours - (days * 24 + hours);
+            const progress = elapsedHours / totalHours;
+            progressFill.style.strokeDashoffset = circumference - progress * circumference;
+        }
+
+        updateCountdown();
+        const timerInterval = setInterval(updateCountdown, 1000);
+    });
+</script>
+</body>
+</html>
