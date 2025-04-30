@@ -220,34 +220,22 @@
 
 <script>
     // Конфигурация таймера
-    const CONFIG = {
-        startDate: new Date('2025-05-05T00:00:00'), // Дата старта отсчета
-        durationDays: 11,                          // Длительность (дни)
-        durationHours: 11                           // Длительность (часы)
+    const DURATION = {
+        days: 11,
+        hours: 11
     };
 
-    // Вычисляем дату окончания
-    function calculateEndDate() {
-        const endDate = new Date(CONFIG.startDate);
-        endDate.setDate(endDate.getDate() + CONFIG.durationDays);
-        endDate.setHours(endDate.getHours() + CONFIG.durationHours);
-        return endDate;
-    }
-
-    // Проверяем сохраненное время
-    let endDate;
-    const savedEndDate = localStorage.getItem('timerEndDate');
-
-    if (savedEndDate) {
-        endDate = new Date(savedEndDate);
-        // Если сохраненная дата уже прошла - создаем новую
-        if (endDate < new Date()) {
-            endDate = calculateEndDate();
-            localStorage.setItem('timerEndDate', endDate.toISOString());
-        }
-    } else {
-        endDate = calculateEndDate();
+    // Проверяем сохраненное время окончания
+    let endDate = localStorage.getItem('timerEndDate');
+    
+    // Если нет сохраненного времени или оно некорректно
+    if (!endDate || isNaN(new Date(endDate).getTime())) {
+        endDate = new Date();
+        endDate.setDate(endDate.getDate() + DURATION.days);
+        endDate.setHours(endDate.getHours() + DURATION.hours);
         localStorage.setItem('timerEndDate', endDate.toISOString());
+    } else {
+        endDate = new Date(endDate);
     }
 
     // Инициализация элементов
@@ -287,9 +275,9 @@
         countdownElement.textContent = `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
 
         // Расчет прогресса
-        const totalDuration = (CONFIG.durationDays * 24 + CONFIG.durationHours) * 60 * 60 * 1000;
-        const elapsed = totalDuration - diff;
-        const progress = elapsed / totalDuration;
+        const totalHours = DURATION.days * 24 + DURATION.hours;
+        const elapsedHours = totalHours - (days * 24 + hours);
+        const progress = elapsedHours / totalHours;
         progressFill.style.strokeDashoffset = circumference - (progress * circumference);
     }
 
