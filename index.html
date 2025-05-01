@@ -287,23 +287,25 @@
 
        const timerElement = document.querySelector(".timer");
 
-    async function fetchTime() {
+   async function fetchTime() {
         try {
-            const response = await fetch("http://<IP_СЕРВЕРА>:8000/remaining-time");
+            const response = await fetch("http://<ТВОЙ_IP>:8000/remaining-time");
             const data = await response.json();
 
-            if (data.status === "ok") {
-                timerElement.textContent = data.remaining;
+            if (data.error) {
+                document.querySelector(".timer").textContent = "00:00:00";
             } else {
-                timerElement.textContent = "00:00:00";
+                const h = String(data.hours).padStart(2, '0');
+                const m = String(data.minutes).padStart(2, '0');
+                const s = String(data.seconds).padStart(2, '0');
+                document.querySelector(".timer").textContent = `${h}:${m}:${s}`;
             }
-        } catch (error) {
-            console.error("Ошибка при получении времени:", error);
-            timerElement.textContent = "Ошибка";
+        } catch (err) {
+            document.querySelector(".timer").textContent = "ошибка";
         }
     }
 
-    // Обновлять каждую секунду
+    // Запускаем таймер и обновляем каждую секунду
     setInterval(fetchTime, 1000);
     fetchTime();
 </script>
