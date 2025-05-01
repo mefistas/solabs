@@ -293,19 +293,18 @@
             const data = await response.json();
 
             if (data.error) {
-                document.querySelector(".timer").textContent = "00:00:00";
+                document.getElementById("countdown").textContent = "00h 00m 00s";
             } else {
                 const h = String(data.hours).padStart(2, '0');
                 const m = String(data.minutes).padStart(2, '0');
                 const s = String(data.seconds).padStart(2, '0');
-                document.querySelector(".timer").textContent = `${h}:${m}:${s}`;
+                document.getElementById("countdown").textContent = `${h}h ${m}m ${s}s`;
             }
         } catch (err) {
-            document.querySelector(".timer").textContent = "ошибка";
+            document.getElementById("countdown").textContent = "ошибка";
         }
     }
 
-    // Запускаем таймер и обновляем каждую секунду
     setInterval(fetchTime, 1000);
     fetchTime();
 </script>
