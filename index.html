@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>solabs</title>
+    <title>Solabs</title>
     <style>
-        /* Все стили остаются точно такими же, как в предыдущей версии */
+        
         @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
         
         body {
@@ -159,14 +159,14 @@
             box-shadow: 0 0 10px #ff00ff;
         }
 
-        .github-connect {
+        .intro-connect {
             display: flex;
             align-items: center;
             justify-content: center;
             color: #c792ea;
         }
 
-        .github-connect input {
+        .intro-connect input {
             margin-right: 10px;
             width: 18px;
             height: 18px;
@@ -176,20 +176,20 @@
 </head>
 <body>
     <div class="container">
-        <h1>¿You+Sol+Abs?</h1>
-        <p class="info-text">something big happening here</p>
+        <h1>¿SOL+ABS?</h1>
+        <p class="info-text">something's clearly going on behind the scenes.</p>
         
         <div class="timer-container">
             <svg width="0" height="0">
                 <defs>
-                    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <lineargradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
                         <stop offset="0%" stop-color="#9d00ff" />
                         <stop offset="100%" stop-color="#ff00ff" />
-                    </linearGradient>
+                    </lineargradient>
                 </defs>
             </svg>
             <div class="timer-circle">
-                <svg class="progress-ring" viewBox="0 0 300 300">
+                <svg class="progress-ring" viewbox="0 0 300 300">
                     <circle class="progress-ring-bg" r="140" cx="150" cy="150"></circle>
                     <circle class="progress-ring-fill" r="140" cx="150" cy="150"></circle>
                 </svg>
@@ -197,34 +197,32 @@
             </div>
         </div>
 
-        <p class="info-text"><strong>you abs sol?</strong></p>
+        <p class="info-text"><strong>abs+you+sol?</strong></p>
         
         <div class="checkbox-container">
             <input type="checkbox" id="confirm">
-            <label for="confirm">abs you sol?</label>
+            <label for="confirm">sol+you+abs?</label>
         </div>
         
         <button class="btn">usless button yet</button>
         
         <div class="divider"></div>
         
-        <div class="github-connect">
-            <input type="checkbox" id="github" checked>
-            <label for="github">you can untick here but you can't escape</label>
+        <div class="intro-connect">
+            <input type="checkbox" id="intro" checked>
+            <label for="intro">you can untick this… but ther's no way out.</label>
         </div>
     </div>
 
-    <audio id="bgMusic" loop>
-        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    <audio id="bgMusic" loop>       
+		<source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
     <script>
-        // Фиксированная конечная дата: текущее время + 11 дней, 11 часов, 11 минут, 11 секунд
-        const endDate = new Date();
-        endDate.setDate(endDate.getDate() + 11);
-        endDate.setHours(endDate.getHours() + 11);
-        endDate.setMinutes(endDate.getMinutes() + 11);
-        endDate.setSeconds(endDate.getSeconds() + 11);
+        
+        const startDate = new Date('2025-05-04T00:00:05');
+        const endDate = new Date('2025-05-11T11:11:11');
+        const totalTime = endDate - startDate;
 
         const countdownElement = document.getElementById('countdown');
         const progressFill = document.querySelector('.progress-ring-fill');
@@ -244,7 +242,7 @@
             const diff = endDate - now;
 
             if (diff <= 0) {
-                countdownElement.textContent = '00d 00h 00m 00s';
+                countdownElement.textContent ='00d 00h 00m 00s';
                 progressFill.style.strokeDashoffset = 0;
                 return;
             }
@@ -257,20 +255,16 @@
             const pad = (num) => num.toString().padStart(2, '0');
             countdownElement.textContent = `${days}d ${pad(hours)}h ${pad(minutes)}m ${pad(seconds)}s`;
 
-            // Общее время в миллисекундах (11 дней 11 часов 11 минут 11 секунд)
-            const totalTime = 11 * 24 * 60 * 60 * 1000 +  // дни
-                            11 * 60 * 60 * 1000 +        // часы
-                            11 * 60 * 1000 +             // минуты
-                            11 * 1000;                   // секунды
-            
-            const elapsed = totalTime - diff;
-            const progress = elapsed / totalTime;
-            progressFill.style.strokeDashoffset = circumference - progress * circumference;
+           
+            const elapsed = new Date() - startDate;
+            const progress = Math.min(elapsed / totalTime, 1);
+            progressFill.style.strokeDashoffset = circumference - (progress * circumference);
         }
 
-        // Update immediately and then every second
+        
         updateCountdown();
         setInterval(updateCountdown, 1000);
     </script>
 </body>
 </html>
+
